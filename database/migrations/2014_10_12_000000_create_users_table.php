@@ -21,8 +21,6 @@ return new class extends Migration
             $table->string('img_url');
             $table->enum('gender',['male','female','non-binary']);
             $table->date('birthday');
-            $table->rememberToken();
-            $table->timestamps();
         });
     }
 
