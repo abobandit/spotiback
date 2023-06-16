@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\AuthorsController as AuthorsController;
-use App\Http\Controllers\TracksController as TracksController;
+use App\Http\Controllers\AuthorController as AuthorController;
+use App\Http\Controllers\TrackController as TrackController;
 use App\Http\Controllers\UserController as UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -18,5 +18,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::apiResource('/users', UserController::class);
-Route::apiResource('/tracks', TracksController::class);
-//Route::apiResource('/authors', AuthorsController::class);
+
+Route::apiResource('/authors', AuthorController::class);
+Route::prefix('/admin')->group(function (){
+	Route::apiResource('/tracks', TrackController::class);;
+});
