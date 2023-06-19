@@ -1,6 +1,8 @@
 <?php
 
-use App\Http\Controllers\AuthorController as AuthorController;
+use App\Http\Controllers\AlbumController as AlbumController;
+use App\Http\Controllers\ArtistController as ArtistController;
+use App\Http\Controllers\GenreController as GenreController;
 use App\Http\Controllers\TrackController as TrackController;
 use App\Http\Controllers\UserController as UserController;
 use Illuminate\Http\Request;
@@ -19,7 +21,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::apiResource('/users', UserController::class);
 
-Route::apiResource('/authors', AuthorController::class);
+Route::apiResource('/artists', ArtistController::class);
 Route::prefix('/admin')->group(function (){
-	Route::apiResource('/tracks', TrackController::class);;
+	Route::apiResource('/tracks', TrackController::class);
+	Route::apiResource('/genres', GenreController::class);
+	Route::apiResource('/albums', AlbumController::class);
 });
