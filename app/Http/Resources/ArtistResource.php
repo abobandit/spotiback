@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AlbumResource extends JsonResource
+class ArtistResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,11 +15,9 @@ class AlbumResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-			'title' => $this -> title,
-	        'type' => $this -> type,
-	        'og_image'=> $this -> og_image,
-			"genre" => new GenreResource($this -> genre),
-	        'artists' => ArtistResource::collection($this->artists)
+			'id'  => $this->id,
+	        'name' => $this->name,
+	        'img_url' => $this->img_url
         ];
     }
 }

@@ -5,12 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Artist extends Model
-{
-    use HasFactory;
+class Artist extends Model {
+	use HasFactory;
+
 	protected $fillable = [
 		'name',
 		'img_url'
 	];
+
+	public function albums() {
+		return $this->belongsToMany(
+			Album::class,
+			'albums-artists');
+	}
+
 	public $timestamps = false;
 }

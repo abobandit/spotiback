@@ -2,18 +2,28 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\{Database\Eloquent\Factories\HasFactory, Database\Eloquent\Model};
 
-class Track extends Model
-{
-    use HasFactory;
+class Track extends Model {
+	use HasFactory;
+
 	protected $fillable = [
 		'title',
 		'storage_dir',
 		'album_id',
-		'og_image'
+		'duration'
 	];
+
+	public function album() {
+		return $this->belongsTo( Album::class );
+	}
+
+	public function playlists() {
+		return $this->belongsToMany(
+			Playlist::class,
+			'playlists-tracks');
+	}
+
 	public $timestamps = false;
 
 }

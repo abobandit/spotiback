@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ArtistRequest;
 use App\Models\Artist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -19,18 +20,10 @@ class ArtistController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ArtistRequest $request)
     {
-	    $validator = Validator::make( $request->all(), [
-		    'name' => 'required',
-		    'img_url' => 'nullable',
-	    ] );
-	    if ( $validator->fails() ) {
-		    return response()->json( [
-			    'errors' => $validator->errors()
-		    ], 422 );
-	    }
-	    $artist = Artist::create( $validator->validated() );
+
+	    $artist = Artist::create( $request->validated() );
 
 	    return response()->json( [ 'message' => 'artist created' ], 200 );
     }

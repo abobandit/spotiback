@@ -11,5 +11,8 @@ class Genre extends Model
 	protected $fillable = [
 		'name'
 	];
+	public function albums(){
+		return $this->hasMany(Album::class);
+	}
 	public $timestamps = false;
 }

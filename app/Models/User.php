@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -23,7 +24,11 @@ class User extends Authenticatable
         'last_name',
         'email',
         'password',
+	    'role'
     ];
+	public function playlists(){
+		return $this->hasMany(Playlist::class);
+	}
 
     /**
      * The attributes that should be hidden for serialization.
@@ -43,5 +48,10 @@ class User extends Authenticatable
     protected $casts = [
         'password' => 'hashed',
     ];
+	function isAdmin(){
+		if (Auth::user()->role=='admin'){
+			return true;
+		}else return false;
+	}
 	public $timestamps = false;
 }
