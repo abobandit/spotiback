@@ -16,7 +16,7 @@ class Artist extends Model {
 	public function albums() {
 		return $this->belongsToMany(
 			Album::class,
-			'albums-artists');
+			'albums-artists','artist_id','album_id');
 	}
 
 	public $timestamps = false;

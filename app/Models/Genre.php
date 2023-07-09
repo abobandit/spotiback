@@ -4,15 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany as HasMany;
 
 class Genre extends Model
 {
+	public $incrementing = false;
+
     use HasFactory;
 	protected $fillable = [
-		'name'
+		'genre',
+		'mood'
 	];
-	public function albums(){
-		return $this->hasMany(Album::class);
-	}
 	public $timestamps = false;
 }

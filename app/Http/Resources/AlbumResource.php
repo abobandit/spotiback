@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -15,10 +16,12 @@ class AlbumResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+			'id' => $this -> id,
 			'title' => $this -> title,
 	        'type' => $this -> type,
 	        'og_image'=> $this -> og_image,
-			"genre" => new GenreResource($this -> genre),
+			"genre" => $this->genre,
+			"tracks" => TrackResource::collection($this->tracks),
 	        'artists' => ArtistResource::collection($this->artists)
         ];
     }

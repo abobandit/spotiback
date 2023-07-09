@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo as BelongsTo;
 
 class Album extends Model
 {
@@ -11,19 +12,19 @@ class Album extends Model
 	protected $fillable = [
 		'title',
 		'type',
-		'genre_id',
+		'genre',
 		'og_image'
 	];
 	public function tracks(){
 		return $this->hasMany(Track::class);
 	}
-	public function genre(){
-		return $this->belongsTo(Genre::class);
+	public function genre(): BelongsTo {
+		return $this->belongsTo(Genre::class,);
 	}
 	public function artists(){
 		return $this->belongsToMany(
 			Artist::class,
-			'albums-artists');
+			'albums-artists','album_id','artist_id');
 	}
 	public $timestamps = false;
 }

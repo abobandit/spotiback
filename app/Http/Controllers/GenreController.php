@@ -20,12 +20,15 @@ class GenreController extends Controller {
 	 * Store a newly created resource in storage.
 	 */
 	public function store( GenreRequest $request ) {
-		$genre = Genre::create( $request->all() );
-		if ( $genre->fails() ) {
-			return response()->json( [
-				'errors' => $genre->errors()
-			], 422 );
-		}
+	try{
+
+	}catch(\PDOException $e){
+	    return response()->json([
+	            'status' => false,
+	            'error' => $e
+    	    ],400);
+	}
+		$genre = Genre::create( $request->validated() );
 
 		return $genre;
 	}
@@ -33,11 +36,11 @@ class GenreController extends Controller {
 	/**
 	 * Display the specified resource.
 	 */
-	public function show( Genre $genre ) {
-		return response()->json( [
-			'id'   => $genre->id,
-			'name' => $genre->name,
-		] );
+	public function show(Genre $genre ) {
+		return response()->json([
+		'genre'=>$genre->genre,
+		'mood'=>$genre->mood,
+		]);
 
 	}
 
@@ -45,10 +48,13 @@ class GenreController extends Controller {
 	/**
 	 * Update the specified resource in storage.
 	 */
-	public function update( GenreRequest $request, Genre $genre ) {
+	public function update( Request $request, Genre $genre ) {
 
-		$genre->update( ['name' => $request->all()['name']]);
-		return response()->json( [ 'message' => 'genre name successfully updated', 'genre' => $genre ] );
+		$genre->update( [
+		'genre' => $request->all()['genre'],
+		'mood' => $request->all()['mood']
+		]);
+		return response()->json( [ 'message' => 'genre successfully updated', 'genre' => $genre ] );
 	}
 
 	/**

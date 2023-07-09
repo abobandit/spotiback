@@ -20,12 +20,14 @@ class GenreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required'
+            'genre' => 'required',
+            'mood' => 'required'
         ];
     }
 	public function messages() {
 		return [
-			'name.required'       => 'name is required',
+			'genre.required'       => 'genre is required',
+			'mood.required'       => 'mood is required',
 		];
 	}
 

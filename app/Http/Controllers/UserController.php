@@ -27,8 +27,19 @@ class UserController extends Controller {
 	 *
 	 * @var string
 	 */
-	protected $redirectTo = '/login';
+	public function authUser()
+	{
+		$user = Auth::user();
+		return response()->json([
+			'data' => [
+				'firstName' => $user->first_name,
+				'lastName' => $user->last_name,
+				'email' => $user->email,
+				'login' => $user->login,
 
+			]
+		], 200);
+	}
 	public function store( UserRequest $request ) {
 		try {
 		if($request->validated( 'role' ) != null){
@@ -65,6 +76,7 @@ class UserController extends Controller {
 	/**
 	 * Display the specified resource.
 	 */
+
 	public function show( User $user ) {
 		$findUser = User::find( $user );
 
@@ -74,7 +86,7 @@ class UserController extends Controller {
 	/**
 	 * Update the specified resource in storage.
 	 */
-	public function update( User $user, UserRequest $request ) {
+	public function update( User $user, request $request ) {
 		$user->update( $request->all() );
 
 		return $user;
@@ -112,6 +124,7 @@ class UserController extends Controller {
 
 			return response()->json( [
 				'status'  => true,
+				'user' => Auth::user(),
 				'role' => Auth::user()->role,
 				'message' => 'User Logged in successfully',
 				'token'   => $token

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Resources\ArtistResource;
 use App\Http\Requests\ArtistRequest;
 use App\Models\Artist;
 use Illuminate\Http\Request;
@@ -14,7 +14,7 @@ class ArtistController extends Controller
      */
     public function index()
     {
-        return Artist::all();
+        return ArtistResource::collection(Artist::all());
     }
 
     /**
@@ -23,9 +23,9 @@ class ArtistController extends Controller
     public function store(ArtistRequest $request)
     {
 
-	    $artist = Artist::create( $request->validated() );
+	    $currentPlaylist = Artist::create( $request->validated() );
 
-	    return response()->json( [ 'message' => 'artist created' ], 200 );
+	    return response()->json( [ 'message' => 'Artist created' ],201 );
     }
 
     /**
@@ -33,25 +33,25 @@ class ArtistController extends Controller
      */
     public function show(Artist $artist)
     {
-        return Artist::find($artist);
+        return new ArtistResource($artist);
     }
 
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Artist $artist)
+    public function update(Request $request, Artist $currentPlaylist)
     {
-        $artist->update($request->all());
-		return $artist;
+        $currentPlaylist->update($request->all());
+		return $currentPlaylist;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Artist $artist)
+    public function destroy(Artist $currentPlaylist)
     {
-        $artist->delete();
-	    return response()->json(['message' => 'artist successfully deleted'],201);
+        $currentPlaylist->delete();
+	    return response()->json(['message' => 'currentPlaylist successfully deleted'],201);
     }
 }

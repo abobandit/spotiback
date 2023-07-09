@@ -41,7 +41,7 @@ class TrackController extends Controller {
 		$track->update( $request->all() );
 
         		return response()->json(['message' => 'track successfully updated',
-        		$track]);
+        		$track],201);
 	}
 
 	/**

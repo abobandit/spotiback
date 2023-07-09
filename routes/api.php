@@ -27,11 +27,13 @@ Route::post( '/login', [ UserController::class, 'login' ] );
 
 
 Route::middleware('auth:sanctum')->group(function (){
-    Route::apiResource( '/playlists', PlaylistController::class );
+	Route::get( '/authUser', [ UserController::class, 'authUser' ] );
+	Route::apiResource( '/playlists', PlaylistController::class );
 	Route::post( '/addToPlaylist/{playlist}', [ PlaylistController::class, 'addToPlaylist' ] );
 	Route::apiResource( '/albums', AlbumController::class )->only( [ 'show', 'index' ] );
 	Route::apiResource( '/tracks', TrackController::class )->only( [ 'show', 'index' ] );
 	Route::apiResource( '/artists', ArtistController::class )->only( [ 'show', 'index' ] );
+	Route::apiResource( '/genres', GenreController::class )->only( [ 'show', 'index' ] );
 
 });
 Route::middleware( [ 'auth:sanctum', 'admin' ] )->prefix( '/admin' )->group( function () {

@@ -13,8 +13,8 @@ class AlbumRequest extends FormRequest
         return [
             'title' => ['required'],
 	        'type' => ['required'],
-	        'genre_id'=>['required'],
-	        'og_image' => ['required','image','mimes:png,jpeg,jpg'],
+	        'genre'=>['required'],
+	        'og_image' => ['nullable','image','mimes:png,jpeg,jpg'],
 	        'artist_id' => ['required']
         ];
     }
@@ -22,8 +22,7 @@ class AlbumRequest extends FormRequest
 		return [
 			'title.required'       => 'title is required',
 			'type.required'       => 'type is required',
-			'genre_id.required'       => 'genre_id is required',
-			'og_image.required'       => 'og_image is required',
+			'genre.required'       => 'genre is required',
 			'artist_id.required'       => 'artist_id is required',
 		];
 	}

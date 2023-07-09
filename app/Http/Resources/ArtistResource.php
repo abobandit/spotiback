@@ -17,7 +17,8 @@ class ArtistResource extends JsonResource
         return [
 			'id'  => $this->id,
 	        'name' => $this->name,
-	        'img_url' => $this->img_url
+	        'img_url' => $this->img_url,
+	        'albums' => $this->albums()->get(['id','title','genre','og_image'])
         ];
     }
 }

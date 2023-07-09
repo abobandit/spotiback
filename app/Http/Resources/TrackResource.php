@@ -17,6 +17,8 @@ class TrackResource extends JsonResource
 			'id' => $this -> id,
 	        'title' => $this -> title,
 	        'duration' => $this -> duration,
+	        'storage_dir' => $this -> storage_dir,
+	        'album_id' => $this -> album_id,
         ];
     }
 }

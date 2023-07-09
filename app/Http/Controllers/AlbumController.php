@@ -20,17 +20,18 @@ class AlbumController extends Controller {
 
 	public function store( AlbumRequest $request) {
 		try {
-			$filename = $request->file('og_image')->store('/');
 
+		    $filename = $request->file('og_image');
+            if(!is_null($filename)) $filename->store('/','public');
 			$album_create =  Album::create([
 				                               'og_image' => $filename
 			                               ] + $request->validated() );
-			$artist = Artist::find($request->artist_id);
-			$album_create->artists()->attach($artist);
+			$currentPlaylist = Artist::find($request->artist_id);
+			$album_create->artists()->attach($currentPlaylist);
 			return response()->json([
 				'album' => $album_create,
-				'artist' => $artist,
-			]);
+				'currentPlaylist' => $currentPlaylist,
+			],201);
 		}catch (\PDOException $exception){
 			return $exception;
 		}

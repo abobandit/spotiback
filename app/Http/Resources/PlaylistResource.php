@@ -18,7 +18,7 @@ class PlaylistResource extends JsonResource
         return   [
 			'id' => $this->id,
 	        "title"=>$this->title,
-
+            "tracks" =>TrackResource::collection($this->tracks)
 //	        "bookings"=>BookingResource::collection($this->bookings),
 //            getSomeBookings(),
 //                Booking::where("event_id",$event->id)->get(),

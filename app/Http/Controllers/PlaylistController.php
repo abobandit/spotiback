@@ -20,34 +20,32 @@ class PlaylistController extends Controller {
 	/**
 	 * Store a newly created resource in storage.
 	 */
-	public function store() {
-		return Playlist::create( [
-			'title'   => 'Новый плейлист',
+	public function store(PlaylistRequest $request) {
+		return  Playlist::create( [
+			'title'   => $request->title,
 			'user_id' => Auth::user()->id
-		] );
+		],201 );
 	}
 
 	/**
 	 * Display the specified resource.
 	 */
 	public function show( Playlist $playlist ) {
-		return response()->json( [
-			'title'   => $playlist->title,
-			'id'      => $playlist->id,
-			'user_id' => $playlist->user_id
-		] );
+		return new PlaylistResource($playlist);
 	}
-
-
 	/**
 	 * Update the specified resource in storage.
 	 */
 	public function update( PlaylistRequest $request, Playlist $playlist ) {
+	if(Auth::user()->role==='admin') {
+            $playlist->update( [ 'title' => $request->title ] );
+            return response()->json( [ 'message' => 'Playlist title successfully updated' ],201 );
+            }
 		try {
 			if ( $playlist->checkCurrentUser( $playlist->user_id ) || ! $playlist->title === 'Любимые треки' ) {
 				$playlist->update( [ 'title' => $request->title ] );
 
-				return response()->json( [ 'message' => 'Playlist title successfully updated' ] );
+				return response()->json( [ 'message' => 'Playlist title successfully updated' ],201 );
 			} else {
 				return response()->json( [ 'status' => false, 'message' => 'Can not update this playlist' ], 404 );
 
@@ -66,24 +64,29 @@ class PlaylistController extends Controller {
 	 * Remove the specified resource from storage.
 	 */
 	public function destroy( Playlist $playlist ) {
+        if(Auth::user()->role==='admin') {
+        $playlist->delete();
+        return response()->json( [ 'message' => 'Playlist successfully deleted' ],201 );
+        }else{
+        try {
+              			if ( $playlist->checkCurrentUser( $playlist->user_id ) || ! $playlist->title === 'Любимые треки' ) {
+              				$playlist->delete();
 
-		try {
-			if ( $playlist->checkCurrentUser( $playlist->user_id ) || ! $playlist->title === 'Любимые треки' ) {
-				$playlist->delete();
+              				return response()->json( [ 'message' => 'Playlist successfully deleted' ] ,201);
+              			} else {
+              				return response()->json( [ 'status' => false, 'message' => 'Can not delete this playlist' ], 404 );
 
-				return response()->json( [ 'message' => 'Playlist successfully deleted' ] );
-			} else {
-				return response()->json( [ 'status' => false, 'message' => 'Can not delete this playlist' ], 404 );
+              			}
 
-			}
+              		} catch ( \Error $exception ) {
+              			return response()->json( [
+              				'status'  => false,
+              				'message' => 'Failed to delete',
+              				'error'   => $exception
+              			], 500 );
+              		}
+        }
 
-		} catch ( \Error $exception ) {
-			return response()->json( [
-				'status'  => false,
-				'message' => 'Failed to delete',
-				'error'   => $exception
-			], 500 );
-		}
 	}
 
 	public function addToPlaylist( Request $request, Playlist $playlist ) {
