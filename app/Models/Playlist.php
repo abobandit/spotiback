@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
+/**
+
+ * @property mixed $title
+ */
 class Playlist extends Model {
 	use HasFactory;
 

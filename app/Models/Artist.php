@@ -12,7 +12,6 @@ class Artist extends Model {
 		'name',
 		'img_url'
 	];
-
 	public function albums() {
 		return $this->belongsToMany(
 			Album::class,

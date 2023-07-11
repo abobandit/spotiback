@@ -31,7 +31,8 @@ class PlaylistController extends Controller {
 	 * Display the specified resource.
 	 */
 	public function show( Playlist $playlist ) {
-		return new PlaylistResource($playlist);
+		$r = new PlaylistResource($playlist);
+		return $r ;
 	}
 	/**
 	 * Update the specified resource in storage.
@@ -113,4 +114,96 @@ class PlaylistController extends Controller {
 			return [ 'status' => false, 'message' => $exception ];
 		}
 	}
+	public function checkTrackInPlaylist( $track_id, $searchLoved,$playlist_id ='Любимые треки')
+    {
+        // Получение пользователя по его id
+
+
+        // Получение плейлиста пользователя по названию
+        if($searchLoved === 'true'){
+          $playlist = Auth::user()->playlists()->where('title',$playlist_id)->first();
+
+        }else{
+            $playlist = Auth::user()->playlists()->where('id',$playlist_id)->first();
+        }
+        if (!$playlist) {
+            // Плейлист не найден
+            return response()->json([
+
+                                    'status' => false,
+                                    'message' => 'Плейлист не найден'
+                                ],400);
+        }
+        // Проверка наличия трека в плейлисте
+        $track = Track::find($track_id);
+        if (!$track) {
+            // Трек не найден
+            return response()->json([
+                        'status' => false,
+                        'message' => 'Трек не найден'
+                    ],400);
+        }
+
+        // Проверка связи трека с плейлистом
+        $isInPlaylist = $playlist->tracks()
+            ->where('track_id', $track_id)
+            ->exists();
+            if($isInPlaylist){
+            return response()->json([
+                    'tracks' =>$playlist->tracks,
+                    'track' =>$track,
+                    'track-finde' =>$track_id,
+                    'playlist' =>$playlist->id,
+                    'status' => true,
+                    'message' => 'уже в плейлисте'
+                    ],200);
+            }
+        else{
+        return response()->json([
+                                'status' => false,
+                                'message' => 'Не в плейлисте'
+                            ],200);
+        }
+    }
+	public function addTrack(Request $request)
+    {
+        $track = $request->track_id;
+        $playlistName = 'Любимые треки';
+
+        // Получение id авторизованного пользователя
+        $userId = Auth::id();
+
+        // Находим плейлист в базе данных по названию и id пользователя
+        $playlist = Playlist::where([
+            ['title', $playlistName],
+            ['user_id', $userId]
+        ])->first();
+
+        if ($playlist) {
+            // Плейлист найден, добавляем трек в плейлист
+            $playlist->tracks()->attach( $track);
+
+            return response()->json(['message' => 'Трек успешно добавлен в плейлист!']);
+        } else {
+            // Плейлист не найден, выполняем соответствующие действия
+            return response()->json(['message' => 'Плейлист не найден!']);
+        }
+    }
+    public function removeFromPlaylist($playlist_id,$track_id)
+    {
+
+        // Находим плейлист и трек в базе данных
+        $playlist = Playlist::find($playlist_id);
+        $track = Track::find($track_id);
+
+        if ($playlist && $track) {
+            // Удаляем запись из связующей таблицы
+            $playlist->tracks()->detach($track_id);
+
+            return response()->json(['message' => 'Запись успешно удалена из плейлиста!']);
+        } else {
+            // Плейлист или трек не найдены, выполняем соответствующие действия
+            return response()->json(['message' => 'Плейлист или трек не найдены!'], 404);
+        }
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\Genre;
 use Illuminate\Http\Request;
+use App\Models\Artist;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AlbumResource extends JsonResource

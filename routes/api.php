@@ -30,8 +30,12 @@ Route::middleware('auth:sanctum')->group(function (){
 	Route::get( '/authUser', [ UserController::class, 'authUser' ] );
 	Route::apiResource( '/playlists', PlaylistController::class );
 	Route::post( '/addToPlaylist/{playlist}', [ PlaylistController::class, 'addToPlaylist' ] );
+	Route::post( '/addToLiked', [ PlaylistController::class, 'addTrack' ] );
+	Route::delete( '/playlists/{playlist_id}/{track_id}', [ PlaylistController::class, 'removeFromPlaylist' ] );
+	Route::get( '/check/{track_id}/{searchLoved}/{playlist_id?}', [ PlaylistController::class, 'checkTrackInPlaylist' ] );
 	Route::apiResource( '/albums', AlbumController::class )->only( [ 'show', 'index' ] );
-	Route::apiResource( '/tracks', TrackController::class )->only( [ 'show', 'index' ] );
+	Route::get( '/tracks', [TrackController::class, 'index'] );
+	Route::get( '/tracks/{track}', [TrackController::class, 'searchPlaylistsByTrackId'] );
 	Route::apiResource( '/artists', ArtistController::class )->only( [ 'show', 'index' ] );
 	Route::apiResource( '/genres', GenreController::class )->only( [ 'show', 'index' ] );
 

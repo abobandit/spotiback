@@ -17,7 +17,6 @@ class Track extends Model {
 	public function album() {
 		return $this->belongsTo( Album::class );
 	}
-
 	public function playlists() {
 		return $this->belongsToMany(
 			Playlist::class,
